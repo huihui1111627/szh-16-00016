@@ -1,0 +1,9 @@
+{
+  "name": "continuous-reactor-abnormal-drill",
+  "version": "1.0.0",
+  "private": true,
+  "description": "连续化工反应装置异常工况处置推演原型",
+  "scripts": {
+    "test": "node --test tests/engine.test.js"
+  }
+}

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>连续化工反应异常工况处置推演</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">连续化工反应装置 · 异常工况推演</p>
+        <h1>异常工况处置推演台</h1>
+      </div>
+      <div class="simulation-controls">
+        <span id="clock" class="clock">T+0s</span>
+        <button id="stepBtn" class="button primary" type="button">推进一步</button>
+        <button id="runBtn" class="button" type="button">连续推演</button>
+        <button id="resetBtn" class="button ghost" type="button">重置</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel stage-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">当前阶段</p>
+            <h2 id="stageTitle">正常生产</h2>
+          </div>
+          <span id="stableBadge" class="badge stable">稳定点</span>
+        </div>
+        <p id="stageDescription" class="stage-description"></p>
+        <div id="alerts" class="alerts"></div>
+        <div class="stage-track">
+          <span data-stage="normal">正常</span>
+          <span data-stage="warning">预警</span>
+          <span data-stage="protection">保护介入</span>
+          <span data-stage="esd">紧急停车</span>
+          <span data-stage="recovery">恢复生产</span>
+        </div>
+      </section>
+
+      <section class="panel process-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">物料流程</p>
+            <h2>影响沿管线逐段传播</h2>
+          </div>
+        </div>
+        <div id="processFlow" class="process-flow"></div>
+      </section>
+
+      <section class="panel controls-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">操作人员动作</p>
+            <h2>阀门、负荷与冷却回路</h2>
+          </div>
+        </div>
+
+        <div class="control-grid">
+          <label class="slider-control">
+            <span>A阀开度 <strong id="valveALabel">50%</strong></span>
+            <input id="valveA" type="range" min="0" max="100" value="50" />
+          </label>
+          <label class="slider-control">
+            <span>B阀开度 <strong id="valveBLabel">50%</strong></span>
+            <input id="valveB" type="range" min="0" max="100" value="50" />
+          </label>
+          <label class="slider-control">
+            <span>生产负荷 <strong id="loadLabel">100%</strong></span>
+            <input id="load" type="range" min="35" max="110" value="100" />
+          </label>
+        </div>
+
+        <div class="cooling-switch">
+          <span>冷却回路</span>
+          <div class="segmented">
+            <button type="button" data-cooling="primary">主冷却</button>
+            <button type="button" data-cooling="backup">备用</button>
+            <button type="button" data-cooling="emergency">紧急</button>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button id="recoverBtn" class="button warning" type="button">开始恢复生产</button>
+          <button id="restoreBtn" class="button" type="button">调用最后有效配置</button>
+          <button id="branchBtn" class="button success" type="button">稳定点生成新方案</button>
+          <button id="abandonBtn" class="button danger ghost" type="button">放弃当前尝试</button>
+        </div>
+        <p id="feedback" class="feedback" role="status"></p>
+      </section>
+
+      <section class="panel metrics-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">反应器核心量</p>
+            <h2>热负荷、冷却能力与压力</h2>
+          </div>
+        </div>
+        <div class="metric-cards">
+          <div>
+            <span>反应热负荷</span>
+            <strong id="heatLoad">0</strong>
+            <small>相对单位</small>
+          </div>
+          <div>
+            <span>冷却能力</span>
+            <strong id="coolingLoad">0</strong>
+            <small>相对单位</small>
+          </div>
+          <div>
+            <span>反应器温度</span>
+            <strong id="reactorTemperature">180.0℃</strong>
+            <small>预警190 / 保护200 / 停车205</small>
+          </div>
+          <div>
+            <span>反应器压力</span>
+            <strong id="reactorPressure">1.45MPa</strong>
+            <small>预警2.3 / 保护2.5 / 停车2.6</small>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel plans-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">方案与回滚</p>
+            <h2>失败尝试不覆盖有效配置</h2>
+          </div>
+        </div>
+        <div id="lastValid" class="last-valid"></div>
+        <ol id="planList" class="plan-list"></ol>
+      </aside>
+
+      <section class="panel events-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">事件序列</p>
+            <h2>报警、联锁与处置记录</h2>
+          </div>
+        </div>
+        <ul id="eventLog" class="event-log"></ul>
+      </section>
+    </main>
+
+    <script src="js/engine.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
